@@ -1,0 +1,6 @@
+<p>
+  You have been invited from <%= @owner.name %>.
+</p>
+<p>
+  Please click <a href="<%= member_signup_v1_users_url + '?token=' + @user.invite_token %>">here</a> to complete the member signup.
+</p>

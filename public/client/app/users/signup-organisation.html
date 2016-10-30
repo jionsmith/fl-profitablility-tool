@@ -1,0 +1,96 @@
+<div id="wrapper">
+    <!--Header-->
+    <div class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <header class="clearfix">
+                        <div class="logo"><a href="#"><img src="images/logo.png" alt=""></a></div>
+                    </header>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+    	<div class="signup-container">
+        	<h2>Signup</h2>
+            <ul class="steps">
+            	<li class="active complete"><div>1</div><span>You</span></li>
+                <li class="active"><div>2</div><span>Your Organisation</span></li>
+                <li><div>3</div><span>Done!</span></li>
+            </ul>
+
+            <div ng-show="errors.length > 0" class="error-container">
+                <p ng-repeat="error in errors">
+                    {{ error }}
+                </p>
+            </div>
+
+            <form ng-submit="update_organisation()">
+                <div class="group">
+                    <input name="organisation-name" type="text" required ng-model="organisation_name">
+                    <label>Organisation Name *</label>
+                </div>
+                <div class="group">
+                    <p>
+                    <strong>What organisation are you measuring the profitability of? *</strong>
+                    </p>
+                </div>
+                <div class="group">
+                	<h3>Project Types</h3>
+                    <input type="text" name="project-types" placeholder="+ Enter a tag, separate by commas" required ng-model="project_tag_str" ng-change="project_tag_change()">
+                    <!-- <a href="#" class="tags">Web Apps</a>
+                    <a href="#" class="tags">Interface</a>
+                    <a href="#" class="tags">Mobile UI</a> -->
+
+                    <a href="" class="tags" ng-repeat="project_tag in project_tags" ng-click="remove_project_tag($index)">
+                        {{project_tag}}
+                    </a>
+                    <a href="" class="cleartags" ng-click="project_tag_str = ''; project_tags = [];">Clear Tags</a>
+                </div>
+                <div class="group-btn" style="text-align:left;">
+                    <input type="submit" class="btn" value="Next">
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+<footer>
+    <div class="container clearfix">
+        <a href="" data-toggle="modal" data-target="#modal-tell-us" class="pull-left">Tell us what you think</a>
+        <div class="copyright pull-right">Copyright 2016. All Rights Reserved.</div>
+    </div>
+</footer>
+
+<!-- Modal Wizard-->
+<div class="modal fade" id="modal-tell-us" tabindex="-1" role="dialog" aria-labelledby="modal-tell-usLabel">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tell-us">
+                            <p>We built this tool because we didn't want to use a bloated CRM for our own profitability tracking. We hope you find it useful as well.</p>
+                            <p>We'd love to hear what you think. Your input will have a direct impact on this product.</p>
+                            <form ng-submit="send_message()">
+                                <div class="group">
+                                    <textarea placeholder="Please enter your comments here...." rows="2"></textarea>
+                                </div>
+                                <div class="group-btn">
+                                    <input type="submit" class="btn" value="Send Message">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/custom.js"></script>

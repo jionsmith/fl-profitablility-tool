@@ -1,0 +1,61 @@
+<div id="wrapper"> 
+    <!--Header-->
+    <div class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <header class="clearfix">
+                        <div class="logo"><a href="#"><img src="images/logo.png" alt=""></a></div>
+                    </header>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+    	<div class="signup-container completed">
+        	<div class="circle"><i class="fa fa-check fa-3x"></i></div>
+        	<h2>You're done!</h2>
+			<p><strong>Thank you for signing up! You can reach out anytime through the Tell Us What You Think button in the footer</strong></p>
+            <a href="" class="btn" ng-click="start_insights()">Start Insights</a>
+        </div>
+        
+    </div>
+</div>
+<footer>
+    <div class="container clearfix">
+        <a href="" data-toggle="modal" data-target="#modal-tell-us" class="pull-left">Tell us what you think</a>
+        <div class="copyright pull-right">Copyright 2016. All Rights Reserved.</div>
+    </div>
+</footer>
+
+<!-- Modal Wizard-->
+<div class="modal fade" id="modal-tell-us" tabindex="-1" role="dialog" aria-labelledby="modal-tell-usLabel">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tell-us">
+                            <p>We built this tool because we didn't want to use a bloated CRM for our own profitability tracking. We hope you find it useful as well.</p>
+                            <p>We'd love to hear what you think. Your input will have a direct impact on this product.</p>
+                            <form ng-submit="send_message()">
+                                <div class="group">
+                                    <textarea placeholder="Please enter your comments here...." rows="2"></textarea>
+                                </div>
+                                <div class="group-btn">
+                                    <input type="submit" class="btn" value="Send Message">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/custom.js"></script>

@@ -1,0 +1,472 @@
+<div id="wrapper">
+  <!--Header-->
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <header class="clearfix">
+          <div class="logo pull-left"><a href="#"><img src="images/logo.png" alt=""></a></div>
+          <div class="menu pull-right">
+            <ul>
+              <!-- <li class="active"><a href="#">Insight <i class="fa fa-angle-down"></i></a></li> -->
+              <li class="active">
+                <!-- <a href="#/dashboard/">Insights <i class="fa fa-angle-down"></i></a> -->
+                <a href="" ng-click="is_click_insights = !is_click_insights">Insights <i class="fa fa-angle-down"></i></a>
+                <ul ng-if="is_click_insights" class="sub-insights">
+                  <li>
+                    <a href="#/dashboard/">Profitablity</a>
+                  </li>
+                  <li>
+                    <a href="">Lead</a>
+                  </li>
+                </ul>
+              </li>
+              <li><a href="#/team" >Team</a></li>
+              <li><a href="#/settings" >Settings</a></li>
+              <li><a href="" ng-click="sign_out()">Sign Out</a></li>
+            </ul>
+          </div>
+        </header>
+        <div class="header-bottom clearfix">
+          <div class="navigation-menu">
+            <ul>
+              <li><a href="{{ '#/clients/' + client_id }}"><img src="images/left-arrow.png" alt=""></a></li>
+              <li class="project-menu">{{project.name}} <span>{{project.project_tag}}</span></li>
+            </ul>
+          </div>
+          <div class="project-navigation">
+            <ul>
+              <li><a href="" data-toggle="modal" data-target="#modal-project-intro"><i class="fa fa-question"></i>How to use</a></li>
+              <li><a href="" data-toggle="modal" data-target="#modal-project-setting" ng-click="load_updated_project()"><i class="fa fa-cog"></i>Project Settings</a></li>
+              <li><a href=""><i class="fa fa-external-link"></i>Export</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="content">
+    <div class="container">
+      <div class="top-box clearfix">
+        <div class="box">
+          <span>Gross Renevue</span>
+          <div class="table">
+            <!-- <div class="td"><small>$</small>25,000 <i>Expected</i></div> -->
+            <div class="td"><small>$</small>{{cal_gross_total()}} <i>Expected</i></div>
+            <div class="td">- <i>Actual</i></div>
+          </div>
+        </div>
+        <div class="box">
+          <span>Gross Expenses</span>
+          <div class="table">
+            <div class="td"><small>$</small>{{cal_gross_expense()}} <i>Expected</i></div>
+            <div class="td">- <i>Actual</i></div>
+          </div>
+        </div>
+        <div class="box">
+          <span>Profit</span>
+          <div class="table">
+            <div class="td"><small>$</small>{{cal_gross_profit()}} <i>Expected</i></div>
+            <div class="td">- <i>Actual</i></div>
+          </div>
+        </div>
+        <div class="box">
+          <span>Profit Margin</span>
+          <div class="table">
+            <div class="td">{{cal_gross_margin()}}% <i>Expected</i></div>
+            <div class="td">- <i>Actual</i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-nav">
+        <ul>
+          <li class="active"><a href="#">Estimate</a></li>
+          <li><a href="#">Actual</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div ng-if="project.category == 'fixed_bid'">
+      <div class="container project-block">
+        <div class="clearfix"><a href="" class="btn pull-right" ng-click="add_expense()">Add Expense</a> <h2>Expenses</h2> </div>
+          <div class="table-container">
+              <div class="table-head clearfix">
+                <div class="col-4">Name</div>
+                <div class="col-4">Job Performed</div>
+                <div class="col-4">Date Added</div>
+                <div class="col-4">Price</div>
+              </div>
+              <ul id="sortable-expenses">
+                <li class="table-row can-move clearfix" ng-repeat="expense in expenses">
+                  <div class="col-4">
+                    <input type="text" placeholder="Enter Name" ng-model="expense.name" ng-blur="update_expense(expense, 'name')" ng-change="expense_change()" ng-keypress="blurOnEnterOnExpense($event, 0)">
+                  </div>
+                  <div class="col-4">
+                    <input type="text" placeholder="Enter Job Performed" ng-model="expense.job" ng-blur="update_expense(expense, 'job')" ng-change="expense_change()" ng-keypress="blurOnEnterOnExpense($event, 1)">
+                  </div>
+                  <div class="col-4">
+                    <input type="text" placeholder="Enter Date Added" ng-model="expense.added_date" ng-blur="update_expense(expense, 'added_date')" ng-change="expense_change()" ng-keypress="blurOnEnterOnExpense($event, 2)">
+                  </div>
+                  <div class="col-4">
+                    <input type="text" placeholder="Enter Price" ng-model="expense.price" ng-blur="update_expense(expense, 'price')" ng-change="expense_change()" ng-keypress="blurOnEnterOnExpense($event, 3)" ng-focus="convert_expense_price(expense)">
+                  </div>
+                  <a href="" class="delete-row" ng-click="remove_expense($index)"><span aria-hidden="true">&times;</span></a>
+                </li>
+              </ul>
+              <div class="add-btn" ng-click="add_expense()"><a href=""><span>Add Expense</span></a></div>
+          </div>
+      </div>
+    </div>
+
+    <div ng-if="project.category != 'fixed_bid'">
+      <div class="container project-block">
+        <div class="clearfix"><a href="" class="btn pull-right" ng-click="add_resource()">Add Resource</a> <h2>Resources</h2> </div>
+        <div class="table-container">
+          <div class="table-head clearfix">
+            <div class="col-4">Role</div>
+            <div class="col-4">Client Rate (Per Hour)</div>
+            <div class="col-4">Name</div>
+            <div class="col-4">Resource Rate (Per Hour)</div>
+          </div>
+          <ul id="sortable">
+            <li class="table-row can-move clearfix" ng-repeat="resource in resources">
+              <div class="col-4"><input type="text" placeholder="Enter Role" ng-model="resource.role" ng-blur="update_resource(resource, 'role')" ng-change="resource_change()" ng-keypress="blurOnEnterOnResource($event, 0)"></div>
+              <div class="col-4"><input type="text" placeholder="Enter Rate (per hour)" ng-model="resource.client_rate" ng-blur="update_resource(resource, 'client_rate')" ng-change="resource_change()" ng-keypress="blurOnEnterOnResource($event, 1)" ng-focus="convert_client_rate(resource)"></div>
+              <div class="col-4"><input type="text" placeholder="Enter Name" ng-model="resource.name" ng-blur="update_resource(resource, 'name')" ng-change="resource_change()" ng-keypress="blurOnEnterOnResource($event, 2)"></div>
+              <div class="col-4"><input type="text" placeholder="Enter Rate (per hour)" ng-model="resource.resource_rate" ng-blur="update_resource(resource, 'resource_rate')" ng-change="resource_change()" ng-keypress="blurOnEnterOnResource($event, 3)" ng-focus="convert_resource_rate(resource)"></div>
+              <a href="" class="delete-row" ng-click="remove_resource($index)"><span aria-hidden="true">&times;</span></a>
+            </li>
+          </ul>
+          <!-- <ul id="sortable1">
+            <li ng-repeat="resource in resources"><div class="table-row can-move clearfix" >{{resource.name}}</div></li>
+
+          </ul> -->
+
+          <div class="add-btn" ng-click="add_resource()">
+            <a href="">
+              <span ng-if="resources.length > 0">Add Resource</span>
+              <span ng-if="resources.length == 0">Add First Resource</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="container project-block">
+        <div class="clearfix">
+          <button href="" class="btn pull-right" ng-disabled="resources.length == 0" ng-click="add_timeline()">Add Week</button>
+          <h2>Timeline
+            <span ng-if="resources.length > 0">Project Total: {{timelines.length}} weeks, {{total_hours}} hrs</span>
+            <span ng-if="resources.length == 0">Project Total: --</span>
+          </h2>
+        </div>
+        <div class="table-container">
+          <div class="column-first">
+            <div class="table-head clearfix">
+              <div class="col-4 full">Resources</div>
+            </div>
+            <div class="table-row clearfix" ng-repeat="resource in resources">
+              <div class="col-4 full">{{resource.role}} <span>{{resource.name}}</span></div>
+            </div>
+            <div class="table-row empty full" ng-if="resources.length == 0">
+              <div class="col-4 full"><div class="add-btn"><a href=""><span></span></a></div></div>
+            </div>
+
+          </div>
+          <div class="column-second">
+            <div class="table-head" ng-if="timelines.length == 0">&nbsp;</div>
+            <div class="table-head clearfix" ng-if="timelines.length > 0">
+              <!-- <div class="col-3" ng-repeat="timeline in timelines" style="position: relative">
+                {{$index + 1}}th week
+                <a href="" class="delete-row delete-timeline-column" ng-click="remove_timeline($index)"><span aria-hidden="true">×</span></a>
+              </div> -->
+
+              <div class="col-3" ng-repeat="n in [] | range: current_max_timeline_index - current_min_timeline_index + 1" style="position: relative">
+                week {{current_min_timeline_index + $index + 1}}
+                <a href="" class="delete-row delete-timeline-column" ng-click="remove_timeline(current_min_timeline_index + $index)"><span aria-hidden="true">×</span></a>
+              </div>
+
+            </div>
+            <div class="table-row empty full" ng-if="timelines.length == 0 && resources.length == 0">
+              <div class="col-3"><div class="add-btn"><a href=""><span></span></a></div></div>
+              <div class="col-3"><div class="add-btn"><a href=""><span></span></a></div></div>
+              <div class="col-3"><div class="add-btn"><a href=""><span></span></a></div></div>
+            </div>
+
+            <div class="table-row clearfix" ng-repeat="resource in resources" ng-init="resource_index = $index" ng-if="bullet_count > 0">
+              <!-- <div class="col-3" ng-repeat="resource_timeline in resource.resource_timelines" ng-init="timeline_index = $index">
+                <input type="text" ng-model="resource_timeline.hours" ng-change="resource_timeline_change()" ng-blur="update_resource_timeline(resource_index, timeline_index)" class="resource-timeline-text">
+              </div> -->
+              <div class="col-3" ng-repeat="n in [] | range: current_max_timeline_index - current_min_timeline_index + 1" ng-init="timeline_index = $index">
+                <input type="text" ng-model="resource.resource_timelines[$index + current_min_timeline_index].hours" ng-change="resource_timeline_change()" ng-blur="update_resource_timeline(resource, current_min_timeline_index + timeline_index)" class="resource-timeline-text" ng-keypress="blurOnEnterOnTimeline($event, timeline_index)" ng-focus="convert_timeline_hours(resource.resource_timelines[$index + current_min_timeline_index])">
+              </div>
+            </div>
+
+
+
+          </div>
+          <div class="column-third">
+            <div class="table-head clearfix">
+              <div class="col-4 full">TOTAL (PER RESOURCE)</div>
+            </div>
+
+            <div class="table-dark" ng-repeat="resource in resources">
+              <!-- <div class="col-4 full">{{resource_total_hours[$index]}} hrs.</div> -->
+              <div class="col-4 full">{{cal_resource_total_hours(resource)}} hrs.</div>
+            </div>
+
+            <div class="table-dark" ng-if="resources.length == 0">
+              <div class="col-4 full">-</div>
+            </div>
+          </div>
+        </div>
+        <div class="bullets clearfix" ng-if="timelines.length != 0">
+          <a href="" class="prev pull-left" ng-class="{disabled: current_bullet_index == 0}" ng-disabled="current_bullet_index == 0" ng-if="bullet_count > 0" ng-click="previous_bullet_index()">
+            <i class="fa fa-chevron-left"></i>Previous
+          </a>
+          <a href="" class="next pull-right" ng-class="{disabled: current_bullet_index == bullet_count -1 }" ng-disabled="current_bullet_index == bullet_count - 1" ng-if="bullet_count > 0" ng-click="next_bullet_index()">
+            Next<i class="fa fa-chevron-right"></i>
+          </a>
+          <div class="bullet-nav">
+            <a href="" ng-repeat="n in [] | range: bullet_count" ng-class="{active: current_bullet_index == $index}" ng-disabled="current_bullet_index == $index" ng-click="change_bullet_index($index)"></a>
+            <!-- <a href=""></a>
+            <a href="" class="active"></a>
+            <a href=""></a> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="container project-block">
+        <div class="clearfix"><h2>Financials</h2></div>
+        <div class="table-container">
+          <div class="table-head clearfix">
+            <div class="col-5">Resource <b>&nbsp;</b></div>
+            <div class="col-5">Revenue Per Role <b>No Discount</b></div>
+            <div class="col-5">Expenses Per Role <b>&nbsp;</b></div>
+            <div class="col-5">Profit per role <b>No Discount</b></div>
+            <div class="col-5">Margin per role <b>No Discount</b></div>
+          </div>
+          <div class="table-row clearfix" ng-if="resources.length == 0">
+            <div class="col-5">-</span></div>
+            <div class="col-5">-</div>
+            <div class="col-5">-</div>
+            <div class="col-5">-</div>
+            <div class="col-5">-</div>
+          </div>
+
+          <div class="table-footer clearfix" ng-if="resources.length == 0">
+            <div class="col-5">Totals</b></div>
+            <div class="col-5">- <b>Total Revenue</b></div>
+            <div class="col-5">- <b>Total Expenses</b></div>
+            <div class="col-5">- <b>total Profit</b></div>
+            <div class="col-5">- <b>Total Margin</b></div>
+          </div>
+
+          <div class="table-row clearfix" ng-repeat="resource in resources">
+            <div class="col-5">{{resource.role}} <span>{{resource.name}}</span></div>
+            <div class="col-5">${{cal_total_resource(resource)}}</div>
+            <div class="col-5">${{cal_expense_resource(resource)}}</div>
+            <div class="col-5">${{cal_profit_resource(resource)}}</div>
+            <div class="col-5">{{cal_margin_resource(resource)}}%</div>
+          </div>
+
+          <div class="table-footer clearfix" ng-if="resources.length > 0">
+            <div class="col-5">Totals</b></div>
+            <div class="col-5">${{cal_gross_total()}} <b>Total Revenue</b></div>
+            <div class="col-5">${{cal_gross_expense()}} <b>Total Expenses</b></div>
+            <div class="col-5">${{cal_gross_profit()}} <b>total Profit</b></div>
+            <div class="col-5">{{cal_gross_margin()}}% <b>Total Margin</b></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<footer>
+  <div class="container clearfix">
+    <a href="" data-toggle="modal" data-target="#modal-tell-us" class="pull-left">Tell us what you think</a>
+    <div class="copyright pull-right">Copyright 2016. All Rights Reserved.</div>
+  </div>
+</footer>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-project-setting" tabindex="-1" role="dialog" aria-labelledby="modal-project-settingLabel" data-backdrop="static">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Project Settings</h4>
+          </div>
+          <div class="modal-body">
+            <form ng-submit="update_project()">
+              <div class="group">
+                <input type="text" required ng-model="updated_project.name">
+                <label>Project Name*</label>
+              </div>
+              <div class="group">
+                <select required ng-model="updated_project.project_tag">
+                  <!-- <option>Project Type *</option>
+                  <option>Mobile App</option>
+                  <option>Web App</option>
+                  <option>Website Production</option> -->
+                  <option value="">Project Type *</option>
+                  <option ng-repeat="val in project_tags" value="{{val.name}}">
+                    {{val.name}}
+                  </option>
+                </select>
+              </div>
+              <div class="group-btn">
+                <input type="submit" class="btn" value="Update Settings">
+                <!-- <input type="button" class="btn-cancel rounded" value="Delete Project" ng-click="remove_project()"> -->
+                <a href="" data-toggle="modal" data-target="#modal-remove-project" class="btn-cancel rounded">Delete Project</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal for remove client -->
+<div class="modal fade" id="modal-remove-project" tabindex="-1" role="dialog" aria-labelledby="modal-remove-clientLabel" data-backdrop="static">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Remove Project</h4>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to remove this project?</p>
+            <a href="" class="btn" ng-click="remove_project()">Confirm</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Project Intro-->
+<div class="modal fade" id="modal-project-intro" tabindex="-1" role="dialog" aria-labelledby="modal-project-introLabel" data-backdrop="static">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel"></h4>
+          </div>
+          <div class="modal-body">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner" role="listbox">
+              <div class="item active">
+                <div class="carousel-caption">
+                <h2>Project Insights</h2>
+                <p>Create profitability reports for your projects. The process is the same for both.</p>
+                </div>
+                <img src="images/intro1.jpg" alt="">
+              </div>
+              <div class="item">
+                <div class="carousel-caption">
+                <h2>Step 1.</h2>
+                <p>Add Resource</p>
+                </div>
+                <img src="images/intro2.jpg" alt="">
+              </div>
+              <div class="item">
+                <div class="carousel-caption">
+                <h2>Step 2.</h2>
+                <p>Fill your resource</p>
+                </div>
+                <img src="images/intro3.jpg" alt="">
+              </div>
+              <div class="item">
+                <div class="carousel-caption">
+                <h2>Step 3.</h2>
+                <p>Add a week.</p>
+                </div>
+                <img src="images/intro4.jpg" alt="">
+              </div>
+              <div class="item">
+                <div class="carousel-caption">
+                <h2>Step 4.</h2>
+                <p>Fill in the week.</p>
+                </div>
+                <img src="images/intro5.jpg" alt="">
+              </div>
+              <div class="item">
+                <div class="carousel-caption">
+                <h2>That's it!</h2>
+                <p>The Resources and Weeks ypu input will automatically generate your project's profitability</p>
+                </div>
+                <img src="images/intro6.jpg" alt="">
+              </div>
+              </div>
+              <ol class="carousel-indicators">
+              <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+              <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+              <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+              <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+              <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+              <li data-target="#carousel-example-generic" data-slide-to="5"></li>
+              </ol>
+
+              <!-- Controls -->
+              <a class="left carousel-control" href="/#carousel-example-generic" role="button" data-slide="prev">
+              <i class="fa fa-angle-left"></i>
+              </a>
+              <a class="right carousel-control" href="/#carousel-example-generic" role="button" data-slide="next">
+              <i class="fa fa-angle-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Wizard-->
+<div class="modal fade" id="modal-tell-us" tabindex="-1" role="dialog" aria-labelledby="modal-tell-usLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel"></h4>
+          </div>
+          <div class="modal-body">
+            <div class="tell-us">
+              <p>We built this tool because we didn't want to use a bloated CRM for our own profitability tracking. We hope you find it useful as well.</p>
+              <p>We'd love to hear what you think. Your input will have a direct impact on this product.</p>
+              <form ng-submit="send_message()">
+                <div class="group">
+                  <textarea placeholder="Please enter your comments here...." rows="2"></textarea>
+                </div>
+                <div class="group-btn">
+                  <input type="submit" class="btn" value="Send Message">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/custom.js"></script>

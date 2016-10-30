@@ -1,0 +1,279 @@
+<div>
+  <div id="wrapper">
+    <!--Header-->
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <header class="clearfix">
+            <div class="logo pull-left"><a href="#"><img src="images/logo.png" alt=""></a></div>
+            <div class="menu pull-right">
+              <ul>
+                <!-- <li class="active"><a href="#">Insight <i class="fa fa-angle-down"></i></a></li> -->
+                <li class="active">
+                  <!-- <a href="#/dashboard/">Insights <i class="fa fa-angle-down"></i></a> -->
+                  <a href="" ng-click="is_click_insights = !is_click_insights">Insights <i class="fa fa-angle-down"></i></a>
+                  <ul ng-if="is_click_insights" class="sub-insights">
+                    <li>
+                      <a href="#/dashboard/">Profitablity</a>
+                    </li>
+                    <li>
+                      <a href="">Lead</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a href="#/team" >Team</a></li>
+                <li><a href="#/settings" >Settings</a></li>
+                <li><a href="" ng-click="sign_out()">Sign Out</a></li>
+              </ul>
+            </div>
+          </header>
+          <div class="header-bottom clearfix">
+            <div class="navigation-menu">
+              <ul>
+                <li><a href="#/dashboard"><img src="images/left-arrow.png" alt=""></a></li>
+                <li><a href="#/dashboard" style="color: white;">Dashboard</a></li>
+              </ul>
+            </div>
+            <a href="" data-toggle="modal" data-target="#modal-add-project" class="pull-right btn">Add Project</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="container">
+        <div class="client-top-box clearfix">
+          <div class="two-column list">
+            <h2>Client PROFITABILITY</h2>
+            <dl>
+              <dt>GROSS REVENUE</dt>
+              <dd><small>$</small> {{gross_info.revenue}}</dd>
+            </dl>
+            <dl>
+              <dt>Gross Expenses</dt>
+              <dd><small>$</small> {{gross_info.expense}}</dd>
+            </dl>
+            <dl>
+              <dt>Profit</dt>
+              <dd><small>$</small> {{gross_info.profit}}</dd>
+            </dl>
+            <dl>
+              <dt>Profit Margin</dt>
+              <dd><small>%</small> {{gross_info.margin}}</dd>
+            </dl>
+          </div>
+          <div class="two-column grid">
+            <h2>Client Information <a href="" class="btn-edit" data-toggle="modal" data-target="#modal-edit-client" ng-click="load_updated_client()">Edit</a></h2>
+            <dl>
+              <dt>Name</dt>
+              <dd>{{client.name}}</dd>
+            </dl>
+            <dl>
+              <dt>Industry</dt>
+              <dd>{{client.industry}}</dd>
+            </dl>
+            <dl>
+              <dt>Location</dt>
+              <dd>{{client.location}}</dd>
+            </dl>
+            <dl>
+              <dt>Revenue</dt>
+              <dd>< $50,000</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="table-container">
+          <div class="table-head clearfix">
+            <div class="col-5">Client</div>
+            <div class="col-5">Gross Renevue</div>
+            <div class="col-5">Gross Expenses</div>
+            <div class="col-5">Profit</div>
+            <div class="col-5">Margin: <a href="#">High to low</a></div>
+          </div>
+          <div class="add-btn" ng-if="projects.length == 0"><a href="" data-toggle="modal" data-target="#modal-add-project"><span>Add your first Project</span></a></div>
+          <div class="table-row clearfix project-row" ng-repeat="project in projects">
+            <div class="col-5" ng-click="goto_project(project.id)">{{project.name}}<span>{{project.project_tag}}</span></div>
+            <div class="col-5" ng-click="goto_project(project.id)">${{show_display_gross_revenue($index)}}</div>
+            <div class="col-5" ng-click="goto_project(project.id)">${{show_display_gross_expense($index)}}</div>
+            <div class="col-5" ng-click="goto_project(project.id)">${{show_display_gross_profit($index)}}</div>
+            <div class="col-5" ng-click="goto_project(project.id)">{{show_display_gross_margin($index)}}%</div>
+            <a href="" data-toggle="modal" data-target="#modal-remove-project" class="delete-row" ng-click="set_project_index($index)"><span aria-hidden="true">&times;</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container clearfix">
+      <a href="" data-toggle="modal" data-target="#modal-tell-us" class="pull-left">Tell us what you think</a>
+      <div class="copyright pull-right">Copyright 2016. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Add Project Modal -->
+  <div class="modal fade" id="modal-add-project" tabindex="-1" role="dialog" aria-labelledby="modal-add-projectLabel" data-backdrop="static">
+    <div class="vertical-alignment-helper">
+      <div class="modal-dialog vertical-align-center">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Add Project</h4>
+            </div>
+            <div class="modal-body">
+              <form ng-submit="add_project()">
+                <div class="group">
+                  <input type="text" required ng-model="project_name">
+                  <label>Project Name*</label>
+                </div>
+                <div class="group">
+                  <select required ng-model="project_tag">
+                    <option value="">Project Tag *</option>
+                    <option ng-repeat="val in project_tags" value="{{val.name}}">
+                      {{val.name}}
+                    </option>
+                  </select>
+                </div>
+                <div class="group">
+                  <select required ng-model="project_category">
+                    <option value="">Project Category *</option>
+                    <option ng-option value="time_and_materials">Time & Materials</option>
+                    <option ng-option value="fixed_bid">Fixed Bid</option>
+                    <option ng-option value="recurring_revenue">Recurring Revenue</option>
+                  </select>
+                </div>
+                <div class="group" ng-show="project_category == 'fixed_bid'">
+                  <input type="text" ng-model="project_bid">
+                  <label>Bid amount</label>
+                </div>
+                <div class="group-btn">
+                  <input type="submit" class="btn" value="Add Project">
+                  <input type="reset" class="btn-cancel" data-dismiss="modal" value="Cancel">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Client Modal -->
+  <div class="modal fade" id="modal-edit-client" tabindex="-1" role="dialog" aria-labelledby="modal-edit-clientLabel" data-backdrop="static">
+    <div class="vertical-alignment-helper">
+      <div class="modal-dialog vertical-align-center">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Edit Client</h4>
+            </div>
+            <div class="modal-body">
+              <form ng-submit="update_client()">
+                <div class="group">
+                  <input type="text" required ng-model="updated_client.name">
+                  <label>Client Name *</label>
+                </div>
+                <div class="group">
+                  <input type="text" required ng-model="updated_client.industry">
+                  <label>Client Industry *</label>
+                </div>
+                <div class="group">
+                  <input type="text" ng-model="updated_client.location">
+                  <label>Client Location</label>
+                </div>
+                <div class="group">
+                  <select required ng-model="updated_client.size">
+                    <option value="">Client Size *</option>
+                    <option value="start_up">Start Up</option>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    <option value="enterprise">Enterprise</option>
+                  </select>
+                </div>
+                <div class="group-btn">
+                  <input type="submit" class="btn" value="Update Client">
+                  <!-- <input type="button" class="btn-cancel" value="Cancel"> -->
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-client-wizard" tabindex="-1" role="dialog" aria-labelledby="modal-client-wizardLabel" ng-if="projects.length == 0">
+    <div class="vertical-alignment-helper">
+      <div class="modal-dialog vertical-align-center">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Whats Now?</h4>
+            </div>
+            <div class="modal-body"> Add a project for this client. <img src="images/client-wizard-modal.jpg" alt=""> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- modal for remove client -->
+<div class="modal fade" id="modal-remove-project" tabindex="-1" role="dialog" aria-labelledby="modal-remove-clientLabel" data-backdrop="static">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Remove Project</h4>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to remove this project?</p>
+            <a href="" class="btn" ng-click="remove_project(project_index)">Confirm</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Wizard-->
+<div class="modal fade" id="modal-tell-us" tabindex="-1" role="dialog" aria-labelledby="modal-tell-usLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel"></h4>
+          </div>
+          <div class="modal-body">
+            <div class="tell-us">
+              <p>We built this tool because we didn't want to use a bloated CRM for our own profitability tracking. We hope you find it useful as well.</p>
+              <p>We'd love to hear what you think. Your input will have a direct impact on this product.</p>
+              <form ng-submit="send_message()">
+                <div class="group">
+                  <textarea placeholder="Please enter your comments here...." rows="2"></textarea>
+                </div>
+                <div class="group-btn">
+                  <input type="submit" class="btn" value="Send Message">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/custom.js"></script>

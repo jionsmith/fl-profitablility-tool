@@ -1,0 +1,114 @@
+<div id="wrapper"> 
+    <!--Header-->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <header class="clearfix">
+                    <div class="logo pull-left"><a href="#"><img src="images/logo.png" alt=""></a></div>
+                    <div class="menu pull-right">
+                        <ul>
+                            <!-- <li class="active"><a href="#">Insight <i class="fa fa-angle-down"></i></a></li> -->
+                            <li class="active">
+                                <!-- <a href="#/dashboard/">Insights <i class="fa fa-angle-down"></i></a> -->
+                                <a href="" ng-click="is_click_insights = !is_click_insights">Insights <i class="fa fa-angle-down"></i></a>
+                                <ul ng-if="is_click_insights" class="sub-insights">
+                                    <li>
+                                        <a href="#/dashboard/">Profitablity</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Lead</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="#/team" >Team</a></li>
+                            <li><a href="#/settings" >Settings</a></li>
+                            <li><a href="" ng-click="sign_out()">Sign Out</a></li>
+                        </ul>
+                    </div>
+                </header>
+                <div class="header-bottom clearfix">
+                    <div class="navigation-menu">
+                        <ul>
+                            <li><a href="#"><img src="images/left-arrow.png" alt=""></a></li>
+                            <li>Add Client</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        
+        <form class="form-space" ng-submit="add_client()">
+            <div class="group">
+                <input name="client-name" type="text" required ng-model="name">
+                <label>Client Name *</label>
+            </div>
+            <div class="group">
+                <input type="text" name="client-industry" required ng-model="industry">
+                <label>Client Industry *</label>
+            </div>
+            <div class="group">
+                <input type="text" name="client-location" value="" ng-model="location">
+                <label>Client Location</label>
+            </div>
+            <div class="group">
+                <select name="client-size" ng-model="size" required>
+                    <option value="">Client Size</option>
+                    <!-- <option value="mobile_app">Mobile App</option>
+                    <option value="web_app">Web App</option>
+                    <option value="website_production">Website Production</option> -->
+                    <option value="start_up">Start Up</option>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    <option value="enterprise">Enterprise</option>
+                </select>
+            </div>
+            <div class="group-btn" style="text-align:left;">
+                <input type="submit" class="btn" value="Add Client">
+                <input type="reset" class="btn-cancel" value="Cancel">
+            </div>
+        </form>
+        
+        
+    </div>
+</div>
+<footer>
+    <div class="container clearfix">
+        <a href="" data-toggle="modal" data-target="#modal-tell-us" class="pull-left">Tell us what you think</a>
+        <div class="copyright pull-right">Copyright 2016. All Rights Reserved.</div>
+    </div>
+</footer>
+
+<!-- Modal Wizard-->
+<div class="modal fade" id="modal-tell-us" tabindex="-1" role="dialog" aria-labelledby="modal-tell-usLabel">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tell-us">
+                            <p>We built this tool because we didn't want to use a bloated CRM for our own profitability tracking. We hope you find it useful as well.</p>
+                            <p>We'd love to hear what you think. Your input will have a direct impact on this product.</p>
+                            <form ng-submit="send_message()">
+                                <div class="group">
+                                    <textarea placeholder="Please enter your comments here...." rows="2"></textarea>
+                                </div>
+                                <div class="group-btn">
+                                    <input type="submit" class="btn" value="Send Message">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/custom.js"></script>

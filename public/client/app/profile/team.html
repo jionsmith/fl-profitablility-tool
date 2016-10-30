@@ -1,0 +1,189 @@
+<div id="wrapper"> 
+    <!--Header-->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <header class="clearfix">
+                    <div class="logo pull-left"><a href="#"><img src="images/logo.png" alt=""></a></div>
+                    <div class="menu pull-right">
+                        <ul>
+                            <!-- <li><a href="#">Insight <i class="fa fa-angle-down"></i></a></li> -->
+                            <li>
+                                <!-- <a href="#/dashboard/">Insights <i class="fa fa-angle-down"></i></a> -->
+                                <a href="" ng-click="is_click_insights = !is_click_insights">Insights <i class="fa fa-angle-down"></i></a>
+                                <ul ng-if="is_click_insights" class="sub-insights">
+                                    <li>
+                                        <a href="#/dashboard/">Profitablity</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Lead</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="active"><a href="#/team" >Team</a></li>
+                            <li><a href="#/settings" >Settings</a></li>
+                            <li><a href="" ng-click="sign_out()">Sign Out</a></li>
+                        </ul>
+                    </div>
+                </header>
+                <div class="header-bottom clearfix">
+                    <div class="navigation-menu">
+                        <ul>
+                            <li>&nbsp;</li>
+                            <li>Your Team</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        
+        <div class="team-container">
+        	<h3>Admins</h3>
+            <div class="admin-head">
+            	<div class="col-2" ng-if="is_super">{{super.name}} (You)</div>
+                <div class="col-2" ng-if="!is_super">{{super.name}}</div>
+                <div class="col-2"><a href=""><i class="fa fa-star"></i>Admin</a></div>
+            </div>
+
+            <div class="admin-head" ng-repeat="admin in admins">
+                <!-- <div class="col-2" ng-if="is_current_admin($index)">{{admin.name}} (You)</div>
+                <div class="col-2" ng-if="!is_current_admin($index)">{{admin.name}}</div> -->
+
+                <div class="col-2">{{get_member_name(admin)}}</div>
+                <div class="col-2"><a href=""><i class="fa fa-star"></i>Admin</a></div>
+            </div>
+
+            <h3>Members</h3>
+            <div class="admin-row" ng-repeat="member in members">
+            	<!-- <div class="col-2" ng-if="is_current_member($index)">{{member.name}} (You)</div>
+                <div class="col-2" ng-if="!is_current_member($index)">{{member.name}}</div> -->
+
+                <div class="col-2">{{get_member_name(member)}}</div>
+                <div class="col-2" ng-if="is_super || is_admin"><a href="" data-toggle="modal" data-target="#modal-make-admin" ng-click="set_member_index($index)"><i class="fa fa-star-o"></i>Make Admin</a></div>
+                <a href="" data-toggle="modal" data-target="#modal-remove-user" class="delete-row" ng-click="set_member_index($index)" ng-if="is_super || is_admin"><span aria-hidden="true">&times;</span></a>
+            </div>
+            <a href="" data-toggle="modal" data-target="#modal-add-team-member" class="btn team-btn" ng-if="is_super || is_admin">Add Member</a>
+        </div>
+        
+    </div>
+</div>
+<footer>
+    <div class="container clearfix">
+        <a href="" data-toggle="modal" data-target="#modal-tell-us" class="pull-left">Tell us what you think</a>
+        <div class="copyright pull-right">Copyright 2016. All Rights Reserved.</div>
+    </div>
+</footer>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-add-team-member" tabindex="-1" role="dialog" aria-labelledby="modal-add-team-memberLabel" data-backdrop="static">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Add team member</h4>
+                        <div class="group" style="max-width: 430px; margin: 0 auto; margin-bottom: 30px; color: green;" ng-show="invite_sent_status == 1">
+                            <label style="color: #39b987;">The invite was successfully sent.</label>
+                        </div>
+                        <div class="group" style="max-width: 430px; margin: 0 auto; margin-bottom: 30px; color: green;" ng-show="invite_sent_status == 2">
+                            <label style="color: rgb(255, 59, 59);">The invite was failed.</label>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <form ng-submit="send_invite()">
+                            
+                            <div class="group">
+                                <input name="email-address" type="text" required ng-model="invite_email">
+                                <label>Email Address *</label>
+                            </div>
+                            <div class="group-btn">
+                                <input type="submit" class="btn" value="Send Invite">
+                                <input type="reset" class="btn-cancel" value="Cancel">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-make-admin" tabindex="-1" role="dialog" aria-labelledby="modal-make-adminLabel" data-backdrop="static">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Make Admin</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to make this user an admin? <br>This will allow the user to invite new members and <br>remove existing members.</p>
+                        <a href="" class="btn" ng-click="make_admin(member_index)">Confirm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-remove-user" tabindex="-1" role="dialog" aria-labelledby="modal-remove-userLabel" data-backdrop="static">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Remove User</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to remove this user?</p>
+                        <a href="" class="btn" ng-click="remove_member(member_index)">Confirm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Wizard-->
+<div class="modal fade" id="modal-tell-us" tabindex="-1" role="dialog" aria-labelledby="modal-tell-usLabel">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tell-us">
+                            <p>We built this tool because we didn't want to use a bloated CRM for our own profitability tracking. We hope you find it useful as well.</p>
+                            <p>We'd love to hear what you think. Your input will have a direct impact on this product.</p>
+                            <form ng-submit="send_message()">
+                                <div class="group">
+                                    <textarea placeholder="Please enter your comments here...." rows="2"></textarea>
+                                </div>
+                                <div class="group-btn">
+                                    <input type="submit" class="btn" value="Send Message">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+	$(document).ready(function(e) {
+        setTimeout(function(){
+			$('input[type="text"], input[type="email"], input[type="password"]').val('');
+		},1);
+    });
+</script>

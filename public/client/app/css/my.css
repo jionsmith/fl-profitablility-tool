@@ -1,0 +1,44 @@
+.client-row:hover {
+    cursor: pointer;
+}
+
+.project-row:hover {
+    cursor: pointer;
+}
+.resource-timeline-text {
+  text-align: center;
+}
+.delete-row.delete-timeline-column {
+  margin: 0;
+  top: -17px;
+  left: 50px;
+}
+.bullets a.disabled {
+  color: #ccc;
+}
+.bullets a.disabled:hover {
+  cursor: default;
+}
+
+.bullet-nav a {
+  margin: 0 2px;
+}
+
+.sub-insights {
+  position: absolute;
+}
+
+.menu ul.sub-insights li {
+  display: block;
+  padding: 5px 0 0px 10px;
+}
+
+.table-row.can-move {
+  cursor: move;
+}
+
+.table-container ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

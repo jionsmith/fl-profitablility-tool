@@ -1,0 +1,162 @@
+<div>
+  <div id="wrapper">
+    <!--Header-->
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <header class="clearfix">
+            <div class="logo pull-left"><a href="#"><img src="images/logo.png" alt=""></a></div>
+            <div class="menu pull-right">
+              <ul>
+                <li class="active">
+                  <!-- <a href="#/dashboard/">Insights <i class="fa fa-angle-down"></i></a> -->
+                  <a href="" ng-click="is_click_insights = !is_click_insights">Insights <i class="fa fa-angle-down"></i></a>
+                  <ul ng-if="is_click_insights" class="sub-insights">
+                    <li>
+                      <a href="#/dashboard/">Profitablity</a>
+                    </li>
+                    <li>
+                      <a href="">Lead</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a href="#/team" >Team</a></li>
+                <li><a href="#/settings" >Settings</a></li>
+                <li><a href="" ng-click="sign_out()">Sign Out</a></li>
+              </ul>
+            </div>
+          </header>
+          <div class="header-bottom clearfix">
+            <div class="secondary-menu">
+              <ul>
+                <li class="active"><a href="">Dashboard</a></li>
+                <li><a href="">Reports</a></li>
+              </ul>
+            </div>
+            <a href="" class="pull-right btn" ng-click="add_client()">Add Client</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="container">
+        <div class="top-box clearfix">
+          <div class="box">
+            <span>Gross Renevue</span>
+            <div class="amount dark"><small>$</small>{{gross_info.revenue}}</div>
+          </div>
+          <div class="box">
+            <span>Gross Expenses</span>
+            <div class="amount red"><small>$</small>{{gross_info.expense}}</div>
+          </div>
+          <div class="box">
+            <span>Profit</span>
+            <div class="amount"><small>$</small>{{gross_info.profit}}</div>
+          </div>
+          <div class="box">
+            <span>Profit Margin</span>
+            <div class="amount">{{gross_info.margin}}<small>%</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="table-container">
+          <div class="table-head clearfix">
+            <div class="col-5">Client</div>
+            <div class="col-5">Gross Renevue</div>
+            <div class="col-5">Gross Expenses</div>
+            <div class="col-5">Profit</div>
+            <div class="col-5">Margin: <a href="" ng-click="order('estimated_gross_info.gross_margin')">{{ reverse && 'High to low' || 'Low to high' }}</a></div>
+          </div>
+          <div class="table-row clearfix client-row" ng-repeat="client in clients | orderBy:predicate:reverse">
+            <div class="col-5" ng-click="goto_client(client.id)">{{client.name}}</div>
+            <div class="col-5" ng-click="goto_client(client.id)">${{show_display_gross_revenue(client)}}</div>
+            <div class="col-5" ng-click="goto_client(client.id)">${{show_display_gross_expense(client)}}</div>
+            <div class="col-5" ng-click="goto_client(client.id)">${{show_display_gross_profit(client)}}</div>
+            <div class="col-5" ng-click="goto_client(client.id)">{{show_display_gross_margin(client)}}%</div>
+            <!-- <a href="" class="delete-row" ng-click="remove_client($index)"><span aria-hidden="true">&times;</span></a> -->
+            <a href="" data-toggle="modal" data-target="#modal-remove-client" class="delete-row" ng-click="set_client(client)"><span aria-hidden="true">&times;</span></a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container clearfix">
+      <a href="" data-toggle="modal" data-target="#modal-tell-us" class="pull-left">Tell us what you think</a>
+      <div class="copyright pull-right">Copyright 2016. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal fade" id="dashboard-wizard" tabindex="-1" role="dialog" aria-labelledby="dashboard-wizardLabel" ng-if="clients.length == 0">
+    <div class="vertical-alignment-helper">
+      <div class="modal-dialog vertical-align-center">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Welcome to insights of your dashboard!</h4>
+            </div>
+            <div class="modal-body"> <strong>Step 1.</strong>: Add your first client! <img src="images/dashboard-wizard-modal.jpg" alt=""> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal for remove client -->
+  <div class="modal fade" id="modal-remove-client" tabindex="-1" role="dialog" aria-labelledby="modal-remove-clientLabel" data-backdrop="static">
+    <div class="vertical-alignment-helper">
+      <div class="modal-dialog vertical-align-center">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Remove Client</h4>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to remove this client?</p>
+              <a href="" class="btn" ng-click="remove_client(client_index)">Confirm</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal Wizard-->
+<div class="modal fade" id="modal-tell-us" tabindex="-1" role="dialog" aria-labelledby="modal-tell-usLabel">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel"></h4>
+          </div>
+          <div class="modal-body">
+            <div class="tell-us">
+              <p>We built this tool because we didn't want to use a bloated CRM for our own profitability tracking. We hope you find it useful as well.</p>
+              <p>We'd love to hear what you think. Your input will have a direct impact on this product.</p>
+              <form ng-submit="send_message()">
+                <div class="group">
+                  <textarea placeholder="Please enter your comments here...." rows="2"></textarea>
+                </div>
+                <div class="group-btn">
+                  <input type="submit" class="btn" value="Send Message">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

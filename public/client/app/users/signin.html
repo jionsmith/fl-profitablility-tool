@@ -1,0 +1,81 @@
+<div id="wrapper">
+    <!--Header-->
+    <div class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <header class="clearfix">
+                        <div class="logo"><a href="#"><img src="images/logo.png" alt=""></a></div>
+                    </header>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="signup-container">
+            <h2>Sign In</h2>
+
+            <div ng-show="errors.length > 0" class="error-container">
+                <p ng-repeat="error in errors">
+                    {{ error }}
+                </p>
+            </div>
+
+            <form ng-submit="signin_user()">
+                <div class="group">
+                    <input name="email-txt" type="text" required ng-model="email">
+                    <label>Your Email *</label>
+                </div>
+                <div class="group">
+                    <a href="" data-toggle="modal" data-target="#modal-forgot-pass" class="forgot-pass">Forgot password?</a>
+                    <input type="password" name="password" required ng-model="password">
+                    <label>Password *</label>
+                </div>
+                <div class="group-btn" style="text-align:left;">
+                    <input type="submit" class="btn" value="Sign In">
+
+                </div>
+
+                <div class="new-signup">Don't have an account? <a href="#/signup">Sign Up</a></div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-forgot-pass" tabindex="-1" role="dialog" aria-labelledby="modal-add-team-memberLabel" data-backdrop="static">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Forgot password?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form ng-submit="forgot_pass()">
+                            <div class="group">
+                                <input name="email-address" type="text" required ng-model="forgot_email">
+                                <label>Email Address *</label>
+                            </div>
+                            <div class="group-btn">
+                                <input type="submit" class="btn" value="Send">
+                                <input type="reset" class="btn-cancel" value="Cancel">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/custom.js"></script>
+<script>
+    $(document).ready(function(e) {
+        setTimeout(function(){
+            $('input[type="text"], input[type="email"], input[type="password"]').val('');
+        },1);
+    });
+</script>
